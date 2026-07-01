@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FinTrack Pro</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./CSS/style.css">
+</head>
+<body>
+
+<!-- ========================================== LOGIN PAGE ================================================ -->
+<div id="page-login">
+  <div class="passbook">
+    <div class="passbook-cover">
+      <div class="mark">
+        <svg viewBox="0 0 24 24"><path d="M3 12c2-4 6-6 9-6s7 2 9 6c-2 4-6 6-9 6s-7-2-9-6Z"/><circle cx="12" cy="12" r="2.4"/></svg>
+      </div>
+      <h1>FinTrack Pro</h1>
+      <p>Personal Ledger</p>
+    </div>
+    <div class="passbook-body">
+      <div class="field">
+        <label for="login-name">Display Name</label>
+        <input id="login-name" type="text" placeholder="e.g. Sakshee Sachan">
+      </div>
+      <div class="field">
+        <label for="login-pass">Passcode</label>
+        <input id="login-pass" type="password" placeholder="••••••••">
+      </div>
+      <button class="btn btn-primary" onclick="document.body.classList.add('show-app')">
+        Open Ledger
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================= APP SHELL — Dashboard + Settings ======================================== -->
+<div id="app-shell">
+
+  <div class="topbar">
+    <div class="brand">
+      <div class="mark"><svg viewBox="0 0 24 24"><path d="M3 12c2-4 6-6 9-6s7 2 9 6c-2 4-6 6-9 6s-7-2-9-6Z"/><circle cx="12" cy="12" r="2.4"/></svg></div>
+      <span>FinTrack Pro</span>
+    </div>
+
+    <div class="ledger-tabs">
+      <button class="active" onclick="showPage('dashboard', this)">Dashboard</button>
+      <button onclick="showPage('settings', this)">Settings</button>
+    </div>
+
+    <div class="topbar-actions">
+      <button class="btn btn-ghost" onclick="document.body.classList.remove('show-app')">Logout</button>
+    </div>
+  </div>
+
+  <main>
+
+    <!-- ===================== DASHBOARD ===================== -->
+    <section class="page-section active" id="section-dashboard">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">Welcome back</span>
+          <h2 style="color:#1C1F1B;">Asha&rsquo;s Ledger</h2>
+        </div>
+      </div>
+
+      <div class="cards">
+        <div class="ledger-card stat-card balance">
+          <div class="stamp"><svg viewBox="0 0 24 24"><path d="M12 2v20M5 9l7-7 7 7"/></svg></div>
+          <div class="stat-label">Current Balance</div>
+          <div class="stat-value">₹48,260</div>
+          <div class="stat-sub">As of today</div>
+        </div>
+        <div class="ledger-card stat-card income">
+          <div class="stat-label">Total Income</div>
+          <div class="stat-value">₹72,500</div>
+          <div class="stat-sub">12 entries</div>
+        </div>
+        <div class="ledger-card stat-card expense">
+          <div class="stat-label">Total Expense</div>
+          <div class="stat-value">₹24,240</div>
+          <div class="stat-sub">19 entries</div>
+        </div>
+        <div class="ledger-card stat-card count">
+          <div class="stat-label">Total Transactions</div>
+          <div class="stat-value">31</div>
+          <div class="stat-sub">This month</div>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="ledger-card panel">
+          <h3>Cash Flow</h3>
+          <div class="panel-sub">Income vs. expense, last 6 entries</div>
+          <div class="chart-fake">
+            <div class="bar-pair"><div class="bar in" style="height:60%"></div><div class="bar out" style="height:30%"></div></div>
+            <div class="bar-pair"><div class="bar in" style="height:80%"></div><div class="bar out" style="height:45%"></div></div>
+            <div class="bar-pair"><div class="bar in" style="height:40%"></div><div class="bar out" style="height:65%"></div></div>
+            <div class="bar-pair"><div class="bar in" style="height:95%"></div><div class="bar out" style="height:25%"></div></div>
+            <div class="bar-pair"><div class="bar in" style="height:55%"></div><div class="bar out" style="height:70%"></div></div>
+            <div class="bar-pair"><div class="bar in" style="height:75%"></div><div class="bar out" style="height:40%"></div></div>
+          </div>
+          <div class="chart-legend">
+            <span><i class="dot in"></i>Income</span>
+            <span><i class="dot out"></i>Expense</span>
+          </div>
+        </div>
+
+        <div class="ledger-card panel">
+          <h3>Recent Activity</h3>
+          <div class="panel-sub">Latest entries in the ledger</div>
+          <div class="recent-list">
+            <div class="recent-row">
+              <div><div class="desc">Freelance payout</div><div class="cat">Salary</div></div>
+              <div class="amt in">+ ₹15,000</div>
+            </div>
+            <div class="recent-row">
+              <div><div class="desc">Grocery run</div><div class="cat">Food &amp; Dining</div></div>
+              <div class="amt out">− ₹2,150</div>
+            </div>
+            <div class="recent-row">
+              <div><div class="desc">Mobile recharge</div><div class="cat">Recharge &amp; Bills</div></div>
+              <div class="amt out">− ₹399</div>
+            </div>
+            <div class="recent-row">
+              <div><div class="desc">Petrol</div><div class="cat">Petrol &amp; Auto</div></div>
+              <div class="amt out">− ₹1,200</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ledger-card table-panel">
+        <div class="table-head-row">
+          <h3 style="font-size:15px;">All Transactions</h3>
+          <div class="filters">
+            <button class="filter-btn active">All</button>
+            <button class="filter-btn">Income</button>
+            <button class="filter-btn">Expense</button>
+          </div>
+        </div>
+        <table>
+          <thead>
+            <tr><th>Date</th><th>Description</th><th>Category</th><th>Amount</th><th></th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="mono">28 Jun</td><td>Freelance payout</td>
+              <td><span class="cat-pill">Salary</span></td>
+              <td class="amt in">+ ₹15,000</td>
+              <td><button class="icon-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2m2 0-1 14a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1L5 6"/></svg></button></td>
+            </tr>
+            <tr>
+              <td class="mono">27 Jun</td><td>Grocery run</td>
+              <td><span class="cat-pill">Food &amp; Dining</span></td>
+              <td class="amt out">− ₹2,150</td>
+              <td><button class="icon-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2m2 0-1 14a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1L5 6"/></svg></button></td>
+            </tr>
+            <tr>
+              <td class="mono">26 Jun</td><td>Mobile recharge</td>
+              <td><span class="cat-pill">Recharge &amp; Bills</span></td>
+              <td class="amt out">− ₹399</td>
+              <td><button class="icon-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2m2 0-1 14a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1L5 6"/></svg></button></td>
+            </tr>
+            <tr>
+              <td class="mono">25 Jun</td><td>Petrol</td>
+              <td><span class="cat-pill">Petrol &amp; Auto</span></td>
+              <td class="amt out">− ₹1,200</td>
+              <td><button class="icon-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2m2 0-1 14a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1L5 6"/></svg></button></td>
+            </tr>
+            <tr>
+              <td class="mono">24 Jun</td><td>Movie night</td>
+              <td><span class="cat-pill">Entertainment</span></td>
+              <td class="amt out">− ₹680</td>
+              <td><button class="icon-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2m2 0-1 14a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1L5 6"/></svg></button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ===================== SETTINGS ===================== -->
+    <section class="page-section" id="section-settings">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">Account</span>
+          <h2 style="color:#1C1F1B;">Settings</h2>
+        </div>
+      </div>
+
+      <div class="settings-grid">
+        <div class="ledger-card settings-card">
+          <h3>Profile</h3>
+          <div class="field">
+            <label for="set-name">Display Name</label>
+            <input id="set-name" type="text" value="Asha Verma">
+          </div>
+          <div class="field" style="margin-bottom:6px;">
+            <label>Currency</label>
+            <div class="currency-grid">
+              <div class="currency-opt active">₹ INR</div>
+              <div class="currency-opt">$ USD</div>
+              <div class="currency-opt">€ EUR</div>
+              <div class="currency-opt">£ GBP</div>
+              <div class="currency-opt">¥ JPY</div>
+            </div>
+          </div>
+          <button class="btn btn-primary" style="margin-top:16px;">Save Changes</button>
+        </div>
+
+        <div class="ledger-card settings-card">
+          <h3>Appearance</h3>
+          <div class="theme-row">
+            <div class="theme-tile light active"><span class="tag">Light</span></div>
+            <div class="theme-tile dark"><span class="tag">Dark</span></div>
+          </div>
+          <div class="toggle-row" style="margin-top:8px;">
+            <div>
+              <div class="t-label">Dark Mode</div>
+              <div class="t-sub">Remembered on your next visit</div>
+            </div>
+            <div class="switch"></div>
+          </div>
+        </div>
+
+        <div class="ledger-card settings-card" id="session-card" style="grid-column:1 / -1;">
+          <h3>Session</h3>
+          <div class="toggle-row">
+            <div>
+              <div class="t-label">Signed in as Asha Verma</div>
+              <div class="t-sub">Session stored locally on this device</div>
+            </div>
+            <button class="btn btn-outline" style="flex:none;">Logout</button>
+          </div>
+        </div>
+
+        <div class="ledger-card danger-zone settings-card" style="grid-column:1 / -1;">
+          <h3>Reset All Data</h3>
+          <p>This clears every transaction and preference stored in this browser. There is no undo.</p>
+          <button class="btn btn-danger">Wipe Everything</button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <button class="fab" onclick="document.getElementById('modal-overlay').classList.add('show')">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M12 5v14M5 12h14"/></svg>
+    Add Transaction
+  </button>
+
+  <footer class="app-foot">FinTrack Pro Browser-Stored Ledger</footer>
+</div>
+
+<!-- ======================================== ADD TRANSACTION MODAL ============================================ -->
+<div class="modal-overlay" id="modal-overlay">
+  <div class="ledger-card modal">
+    <div class="modal-head">
+      <h3>New Entry</h3>
+      <button class="modal-close" onclick="document.getElementById('modal-overlay').classList.remove('show')">✕</button>
+    </div>
+
+    <div class="type-toggle">
+      <button class="t-in active">↑ Income</button>
+      <button class="t-out">↓ Expense</button>
+    </div>
+
+    <div class="field">
+      <label for="m-desc">Description</label>
+      <input id="m-desc" type="text" placeholder="e.g. Electricity bill">
+    </div>
+
+    <div class="field-row">
+      <div class="field">
+        <label for="m-amt">Amount</label>
+        <input id="m-amt" type="text" placeholder="₹ 0.00">
+      </div>
+      <div class="field">
+        <label for="m-date">Date</label>
+        <input id="m-date" type="text" placeholder="DD / MM / YYYY">
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="m-cat">Category</label>
+      <select id="m-cat" class="cat-select">
+        <option>Food &amp; Dining</option>
+        <option>Shopping</option>
+        <option>Recharge &amp; Bills</option>
+        <option>Petrol &amp; Auto</option>
+        <option>Utilities</option>
+        <option>Salary</option>
+        <option>Entertainment</option>
+        <option>Other</option>
+      </select>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="document.getElementById('modal-overlay').classList.remove('show')">Cancel</button>
+      <button class="btn btn-save">Save Entry</button>
+    </div>
+  </div>
+</div>
+
+<script src="./JS/script.js"></script>
+
+</body>
+</html>
