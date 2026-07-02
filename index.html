@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>FinTrack Pro</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@latest/dist/chart.umd.min.js" defer></script>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="./CSS/style.css">
 </head>
@@ -94,13 +95,8 @@
         <div class="ledger-card panel">
           <h3>Cash Flow</h3>
           <div class="panel-sub">Income vs. expense, last 6 entries</div>
-          <div class="chart-fake">
-            <div class="bar-pair"><div class="bar in" style="height:60%"></div><div class="bar out" style="height:30%"></div></div>
-            <div class="bar-pair"><div class="bar in" style="height:80%"></div><div class="bar out" style="height:45%"></div></div>
-            <div class="bar-pair"><div class="bar in" style="height:40%"></div><div class="bar out" style="height:65%"></div></div>
-            <div class="bar-pair"><div class="bar in" style="height:95%"></div><div class="bar out" style="height:25%"></div></div>
-            <div class="bar-pair"><div class="bar in" style="height:55%"></div><div class="bar out" style="height:70%"></div></div>
-            <div class="bar-pair"><div class="bar in" style="height:75%"></div><div class="bar out" style="height:40%"></div></div>
+          <div class="chart-canvas-wrap" style="position:relative; height:220px;">
+            <canvas id="cashFlowChart"></canvas>
           </div>
           <div class="chart-legend">
             <span><i class="dot in"></i>Income</span>

@@ -131,6 +131,7 @@ function renderAll() {
   renderStats(txns, prefs.currency);
   renderRecent(txns, prefs.currency);
   renderTable(txns, prefs.currency);
+  renderCashFlowChart(txns, prefs.currency);
 }
 
 function renderStats(txns, currency) {
@@ -252,6 +253,101 @@ function saveModalEntry() {
   closeModal();
 }
 
+
+// ============================================================
+// CASH FLOW CHART (Chart.js)
+// ============================================================
+
+let cashFlowChart = null;
+
+function buildCashFlowSeries(txns) {
+  // group by date, sum income/expense per day
+  const byDate = {};
+  txns.forEach(t => {
+    if (!byDate[t.date]) byDate[t.date] = { in: 0, out: 0 };
+    byDate[t.date][t.type] += t.amount;
+  });
+
+  // sort dates ascending, take last 6
+  const sortedDates = Object.keys(byDate).sort();
+  const lastSix = sortedDates.slice(-6);
+
+  return {
+    labels: lastSix.map(d => fmtDate(d)),
+    income: lastSix.map(d => byDate[d].in),
+    expense: lastSix.map(d => byDate[d].out)
+  };
+}
+
+function renderCashFlowChart(txns, currency) {
+  const canvas = document.getElementById('cashFlowChart');
+  if (!canvas) return;
+  if (typeof Chart === 'undefined') {
+    console.warn('Chart.js not loaded yet — retrying in 200ms');
+    setTimeout(() => renderCashFlowChart(txns, currency), 200);
+    return;
+  }
+
+  const { labels, income, expense } = buildCashFlowSeries(txns);
+
+  if (cashFlowChart) {
+    cashFlowChart.destroy();
+  }
+
+  const isDark = document.body.classList.contains('dark-mode');
+  const gridColor = isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.06)';
+  const textColor = isDark ? '#c9cdc4' : '#5c6058';
+
+  cashFlowChart = new Chart(canvas.getContext('2d'), {
+    type: 'bar',
+    data: {
+      labels: labels.length ? labels : ['No data'],
+      datasets: [
+        {
+          label: 'Income',
+          data: income.length ? income : [0],
+          backgroundColor: '#6f8f4e',   // matches your olive/ledger palette
+          borderRadius: 4,
+          maxBarThickness: 22
+        },
+        {
+          label: 'Expense',
+          data: expense.length ? expense : [0],
+          backgroundColor: '#b5562f',   // rust/terracotta, complements the passbook look
+          borderRadius: 4,
+          maxBarThickness: 22
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false }, // you already have a custom legend below the chart
+        tooltip: {
+          callbacks: {
+            label: (ctx) => `${ctx.dataset.label}: ${fmtMoney(ctx.raw, currency)}`
+          }
+        }
+      },
+      scales: {
+        x: {
+          grid: { display: false },
+          ticks: { color: textColor, font: { family: 'IBM Plex Mono', size: 11 } }
+        },
+        y: {
+          grid: { color: gridColor },
+          ticks: {
+            color: textColor,
+            font: { family: 'IBM Plex Mono', size: 11 },
+            callback: (val) => fmtMoney(val, currency)
+          }
+        }
+      }
+    }
+  });
+}
+
 // ============================================================
 // SETTINGS — CURRENCY / THEME / LOGOUT / WIPE
 // ============================================================
@@ -362,7 +458,13 @@ function doLogin() {
   LoginManager.login(name);
   document.body.classList.add('show-app');
   updateUserDisplay(name);
+  if (LoginManager.isLoggedIn()) {
+    const user = LoginManager.getUser();
+    document.body.classList.add('show-app');
+    updateUserDisplay(user.name);
+  }
   renderAll();
+  requestAnimationFrame(() => cashFlowChart?.resize());
 }
 
 function doLogout() {
@@ -430,3 +532,38 @@ document.addEventListener('DOMContentLoaded', () => {
 
   renderAll();
 });
+
+
+
+// Wipe everything
+const wipeBtn = document.querySelector('.danger-zone .btn-danger');
+wipeBtn?.addEventListener('click', () => {
+  const confirmed = confirm('This will permanently delete all transactions and preferences on this device. Continue?');
+  if (!confirmed) return;
+
+  // 1. Clear all localStorage keys used by the app
+  localStorage.removeItem(STORAGE_TXNS);
+  localStorage.removeItem(STORAGE_PREFS);
+  localStorage.removeItem(STORAGE_USER);
+
+  // 2. Reset in-memory state back to defaults
+  currentFilter = 'all';
+  Prefs.apply(Prefs.defaults);
+
+  // 3. Kick back to login screen (session is gone, so re-auth is required)
+  document.body.classList.remove('show-app');
+  document.getElementById('login-name').value = '';
+  document.getElementById('login-pass').value = '';
+
+  // 4. Destroy the chart instance so it doesn't hold stale data
+  if (cashFlowChart) {
+    cashFlowChart.destroy();
+    cashFlowChart = null;
+  }
+
+  flashButton(wipeBtn, 'Wiped!');
+});
+
+
+
+
